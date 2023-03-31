@@ -1,0 +1,24 @@
+{
+  "name": "keyboard-ninja",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trpo2023/cw-ip-214_keyboard_ninja.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trpo2023/cw-ip-214_keyboard_ninja/issues"
+  },
+  "homepage": "https://github.com/trpo2023/cw-ip-214_keyboard_ninja#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
