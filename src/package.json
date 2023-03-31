@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "debug": "nodemon --inspect index.js",
-    "format": "npx prettier --write ."    
+    "format": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
