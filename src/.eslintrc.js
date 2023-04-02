@@ -4,10 +4,12 @@ module.exports = {
     commonjs: true,
     es2021: true,
   },
-  extends: ["standard", "prettier"],
+  extends: ["airbnb", "prettier"],
   overrides: [],
   parserOptions: {
     ecmaVersion: "latest",
   },
-  rules: {},
+  rules: {
+    "no-console": "off",
+  },
 };
