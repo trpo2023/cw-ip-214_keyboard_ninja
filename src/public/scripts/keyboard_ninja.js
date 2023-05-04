@@ -36,7 +36,6 @@ class KeyboardNinja {
 
   bind_events() {
     document.addEventListener("keydown", (event) => {
-      console.log(event.keyCode);
       if (isNonSystemSymbol(event.keyCode)) {
         this.handle_keypress(event.key);
       }

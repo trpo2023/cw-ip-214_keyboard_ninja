@@ -23,13 +23,15 @@ html {
 }
 
 #main {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
+  width: 80%;
+  height: 80%;
+  margin: 5% auto;
 }
 
 #main_text {
+  margin-top: 10%;
   display: inline-flex;
+  flex-wrap: wrap;
   font-size: 20pt;
   margin: 0 auto;
 }
