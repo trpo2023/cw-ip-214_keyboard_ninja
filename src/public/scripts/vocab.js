@@ -1,4 +1,4 @@
-async function set_vocabs() {
+async function set_vocabs(change_cb) {
   const response = await fetch("http://localhost:3000/api/get_vocabs");
   const data = await response.json();
   const vocabs = Array.prototype.concat.apply([], Object.values(data));
@@ -9,6 +9,11 @@ async function set_vocabs() {
     option.innerText = vocabs[i];
     select.appendChild(option);
   }
+
+  select.addEventListener("change", async (event) => {
+    const vocab_name = event.target.value;
+    change_cb(vocab_name);
+  });
 }
 
 async function get_text_by_vocab_name(vocab_name, length) {

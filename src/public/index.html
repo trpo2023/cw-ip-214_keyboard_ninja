@@ -13,11 +13,17 @@
   </head>
 
   <body>
+    <div id="carret"></div>
     <div id="main" tabindex="0">
-      <select id="vocab_select">
-        <option>Выберите словарь</option>
-      </select>
-      <input id="text_length" type="number" value="50" min="10" max="100" />
+      <div id="options_holder">
+        Словарь:
+        <select id="vocab_select">
+          <option>Выберите словарь</option>
+        </select>
+        Кол-во слов: <input id="text_length" type="number" value="50" min="10" max="100" />
+      </div>
+
+      <div id="stats"></div>
       <div id="main_text"></div>
     </div>
   </body>
