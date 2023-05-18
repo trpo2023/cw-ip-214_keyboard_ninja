@@ -182,7 +182,7 @@ function replace_space(char) {
 function isNonSystemSymbol(key) {
   const russian_letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
   const numbers = "01234567890";
-  const specials = " !@#$%^&*()_[]./'\"№;:?*+-";
+  const specials = " !@#$%^&*~()_[]{}|./'\"№;:?+-\\<>";
   const eng_letters = "abcdefghijklmnopqrstuvwxyz";
 
   const keys = ["Backspace"];
