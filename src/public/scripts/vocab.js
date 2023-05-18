@@ -24,7 +24,6 @@ async function get_text_by_vocab_name(vocab_name, length) {
   let text = "";
   for (let i = 0; i < length; i++) {
     let rnd = Math.round(Math.random() * words.length);
-    console.log(rnd);
     let word = words[rnd];
     text += word + (i < length - 1 ? " " : "");
   }

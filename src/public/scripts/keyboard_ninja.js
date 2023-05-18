@@ -122,7 +122,8 @@ class KeyboardNinja {
 
   bind_events() {
     document.addEventListener("keydown", (event) => {
-      if (isNonSystemSymbol(event.keyCode)) {
+      console.log(event.key);
+      if (isNonSystemSymbol(event.key)) {
         this.handle_keypress(event.key);
       }
     });
@@ -178,25 +179,16 @@ function replace_space(char) {
   return char == " " ? "&nbsp;" : char;
 }
 
-// TODO: Добавить в массив разрешенные символы
-function isNonSystemSymbol(keyCode) {
-  return (
-    (keyCode >= 48 && keyCode <= 57) || // numbers
-    (keyCode >= 65 && keyCode <= 90) || // uppercase letters
-    (keyCode >= 97 && keyCode <= 122) || // lowercase letters
-    keyCode === 32 || // space
-    keyCode === 8 || // backspace
-    keyCode === 191 || // ?
-    keyCode === 190 || // .
-    keyCode === 188 || // ,
-    keyCode === 169 || // -
-    keyCode === 167 || // +
-    keyCode === 186 || // ||
-    keyCode === 192 || // ё
-    keyCode === 219 || // х
-    keyCode === 221 || // ъ
-    keyCode === 222 // э
-  );
+function isNonSystemSymbol(key) {
+  const russian_letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+  const numbers = "01234567890";
+  const specials = " !@#$%^&*()_[]./'\"№;:?*+-";
+  const eng_letters = "abcdefghijklmnopqrstuvwxyz";
+
+  const keys = ["Backspace"];
+  const all_symb = russian_letters + numbers + specials + eng_letters;
+  const all_symb_upper = all_symb.toUpperCase();
+  return all_symb.includes(key) || all_symb_upper.includes(key) || keys.includes(key);
 }
 
 module.exports = {

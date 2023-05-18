@@ -34,6 +34,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
+    "keycode": "^2.2.1",
     "prettier": "2.8.7"
   }
 }
