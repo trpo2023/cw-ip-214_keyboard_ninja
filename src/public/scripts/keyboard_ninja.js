@@ -198,3 +198,8 @@ function isNonSystemSymbol(keyCode) {
     keyCode === 222 // э
   );
 }
+
+module.exports = {
+  isNonSystemSymbol,
+  replace_space,
+};
