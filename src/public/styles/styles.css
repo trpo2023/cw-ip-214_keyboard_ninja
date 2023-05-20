@@ -128,3 +128,9 @@ input:focus {
 #options_holder {
   color: rgb(199, 199, 199);
 }
+
+.stats {
+  text-align: left;
+  width: 60%;
+  margin: 0 auto;
+}
