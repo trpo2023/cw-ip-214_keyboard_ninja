@@ -8,6 +8,8 @@ class KeyboardNinja {
     this.carret_element = document.getElementById(carret_element_id);
     this.stats_element = document.getElementById(stats_holder_element_id);
 
+    this.char_count_time_rel = {};
+
     this.bind_events();
 
     this.show_helper_text();
@@ -52,6 +54,7 @@ class KeyboardNinja {
   clear() {
     this.text = "";
     this.char_elements = [];
+    this.char_count_time_rel = {};
     this.current_char_index = 0;
     this.main_element.innerHTML = "";
     this.stats_element.innerHTML = "";
@@ -87,7 +90,67 @@ class KeyboardNinja {
 
   //TODO: Доделать
   show_statisticts() {
-    return new Error("Not Yet Implemented");
+    const char_count = this.text.length;
+    const word_count = this.text.split(" ").length;
+    const wpm = Math.round(this.text.split(" ").length / this.sec_passed);
+
+    this.stats_element.innerHTML = "";
+    this.main_element.innerHTML = "";
+
+    const statistics_el = document.createElement("div");
+    statistics_el.innerHTML = `
+    CPM (Characters Per Minute): ${char_count}</br>
+    WPM (Words Per Minute): ${word_count}</br>`;
+    statistics_el.classList.add("stats");
+    const canvas = document.createElement("canvas");
+    statistics_el.appendChild(canvas);
+    this.main_element.appendChild(statistics_el);
+
+    const data = Object.keys(this.char_count_time_rel).map((e) => {
+      return {
+        sec: e,
+        error: this.char_count_time_rel[e].error,
+        correct: this.char_count_time_rel[e].correct,
+      };
+    });
+
+    new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: Object.keys(this.char_count_time_rel),
+        datasets: [
+          {
+            label: "# of Errors",
+            data: data.map((d) => ({ x: d.sec, y: d.error })),
+            backgroundColor: "rgba(255, 0, 0, 0.5)", // Red color with 50% opacity
+            borderColor: "rgba(255, 0, 0, 1)", // Red color with full opacity
+          },
+          {
+            label: "# of Correct",
+            data: data.map((d) => ({ x: d.sec, y: d.correct })),
+            backgroundColor: "rgba(0, 255, 0, 0.5)", // Green color with 50% opacity
+            borderColor: "rgba(0, 255, 0, 1)", // Green color with full opacity
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "seconds",
+          fontSize: 8,
+        },
+        elements: {
+          line: {
+            tension: 0.3,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
   }
 
   init_counters() {
@@ -115,14 +178,13 @@ class KeyboardNinja {
   update_timer() {
     if (this.timer_start == undefined) return;
 
-    const sec_passed = Math.floor((new Date() - this.timer_start) / 1000);
-    this.timer_element.innerText = `${sec_passed} sec`;
+    this.sec_passed = Math.floor((new Date() - this.timer_start) / 1000);
+    this.timer_element.innerText = `${this.sec_passed} sec`;
     setTimeout(() => this.update_timer(), 1000);
   }
 
   bind_events() {
     document.addEventListener("keydown", (event) => {
-      console.log(event.key);
       if (isNonSystemSymbol(event.key)) {
         this.handle_keypress(event.key);
       }
@@ -138,7 +200,6 @@ class KeyboardNinja {
   }
 
   handle_keypress(key) {
-    // TODO Переход на статистику
     if (this.current_char_index >= this.text.length) return;
     if (this.is_paused) return;
 
@@ -149,9 +210,18 @@ class KeyboardNinja {
       this.show_carret();
     }
 
+    if (!this.char_count_time_rel[this.sec_passed ?? 0]) {
+      this.char_count_time_rel[this.sec_passed ?? 0] = {
+        error: 0,
+        correct: 0,
+      };
+    }
+
     if (key == this.text[this.current_char_index]) {
       this.char_elements[this.current_char_index].classList.add("letter_right");
       this.current_char_index++;
+
+      this.char_count_time_rel[this.sec_passed ?? 0].correct++;
     } else if (key == "Backspace") {
       this.current_char_index--;
       this.char_elements[this.current_char_index].classList.remove("letter_error");
@@ -159,18 +229,22 @@ class KeyboardNinja {
     } else {
       this.char_elements[this.current_char_index].classList.add("letter_error");
       this.current_char_index++;
+
+      this.char_count_time_rel[this.sec_passed ?? 0].error++;
     }
 
-    const letter_coordinates = this.char_elements[this.current_char_index].getBoundingClientRect();
-    this.carret_element.style.left = letter_coordinates.left + "px";
-    this.carret_element.style.top = letter_coordinates.top + 5 + "px";
-
-    this.update_counters();
     // Конец написания текста
-    if (this.current_char_index == this.text.length - 1) {
+    if (this.current_char_index == this.text.length) {
       this.timer_start = undefined;
       this.hide_carret();
-      return;
+
+      this.show_statisticts();
+    } else {
+      const letter_coordinates = this.char_elements[this.current_char_index].getBoundingClientRect();
+      this.carret_element.style.left = letter_coordinates.left + "px";
+      this.carret_element.style.top = letter_coordinates.top + 5 + "px";
+
+      this.update_counters();
     }
   }
 }
@@ -191,7 +265,9 @@ function isNonSystemSymbol(key) {
   return all_symb.includes(key) || all_symb_upper.includes(key) || keys.includes(key);
 }
 
-module.exports = {
-  isNonSystemSymbol,
-  replace_space,
-};
+if (typeof window === "undefined") {
+  module.exports = {
+    isNonSystemSymbol,
+    replace_space,
+  };
+}

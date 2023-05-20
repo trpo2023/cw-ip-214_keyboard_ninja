@@ -10,7 +10,7 @@ const change_text_by_vocab_name = async (vocab_name) => {
   const length_input = document.getElementById("text_length");
   let length = length_input.value;
 
-  if (length < 10) length = 10;
+  //if (length < 10) length = 10;
   if (length > 100) length = 100;
 
   const text = await get_text_by_vocab_name(vocab_name, length);
